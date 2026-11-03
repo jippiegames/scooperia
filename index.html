@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Papa's Scooperia - Fullscreen</title>
+    <style>
+        /* Forceer de pagina en body om 100% van het scherm te vullen zonder scrollbar */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        /* Zorg dat de speler-container exact het hele scherm vult */
+        #player {
+            width: 100vw;
+            height: 100vh;
+            display: block;
+        }
+
+        /* Zorg dat het Ruffle-element zelf ook dwingend de volledige ruimte pakt */
+        ruffle-player {
+            width: 100% !important;
+            height: 100% !important;
+            display: block !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="player"></div>
+
+    <!-- Betrouwbare Ruffle engine via CDN -->
+    <script src="https://unpkg.com"></script>
+    
+    <script>
+        window.RufflePlayer = window.RufflePlayer || {};
+        
+        // Ruffle configuratie om het spel te dwingen het scherm te vullen
+        window.RufflePlayer.config = {
+            letterbox: "off",     /* Zet letterboxing UIT om zwarte balken te voorkomen */
+            scale: "exactFit",    /* Zorgt dat het spel exact stretcht en mee-resizet naar het venster */
+            forceScale: true,
+            allowScriptAccess: true
+        };
+
+        window.addEventListener("load", () => {
+            const ruffle = window.RufflePlayer.newest();
+            const player = ruffle.createPlayer();
+            const container = document.getElementById("player");
+            container.appendChild(player);
+            
+            // Laadt jouw geüploade .swf bestand
+            player.load({
+                url: "papasscooperia_v102.swf"
+            });
+
+            // Extra trigger om bij het veranderen van venstergrootte de layout te verversen
+            window.addEventListener("resize", () => {
+                if (player && typeof player.requestLayout === "function") {
+                    player.requestLayout();
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
